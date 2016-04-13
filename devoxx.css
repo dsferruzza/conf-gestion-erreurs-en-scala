@@ -431,6 +431,20 @@ html.light .footer p {
 .slides .fourth {
   color: #10001a; }
 
+html.intro .reveal .slides section h2 {
+  background-color: #c11e53;
+  color: white;
+  text-align: left;
+  padding-top: 0;
+  padding-left: 4%;
+  padding-right: 4%;
+  font-size: 1.6em; }
+
+html.intro .reveal .slides section h3 {
+  background-color: transparent;
+  text-align: right;
+  font-size: 0.6em; }
+
 /*
 
 Zenburn style from voldmar.ru (c) Vladimir Epifanov <voldmar@voldmar.ru>
