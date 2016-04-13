@@ -2,7 +2,6 @@
   "name": "presentation-starter",
   "private": true,
   "dependencies": {
-    "reveal.js": "3.2.0",
-    "lato-font": "1.1.1"
+    "reveal.js": "3.2.0"
   }
 }
