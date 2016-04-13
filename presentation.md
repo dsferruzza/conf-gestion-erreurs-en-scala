@@ -1,31 +1,13 @@
-% Title
-% Optional subtitle
-% Author
+% Gérer les erreurs avec l'aide du système de types de Scala !
+% David Sferruzza
+% 22/04/2016
 
-# Slide 1
+# À propos de moi
 
-- item 1
-- item 2
-- item 3
-- item 4
-- item 4
+- [\@d_sferruzza](https://twitter.com/d\_sferruzza)
+- [github.com/dsferruzza](https://github.com/dsferruzza)
+- développeur et responsable R&D chez [Escale](http://www.escaledigitale.com)
+- doctorant en génie logiciel à l'Université de Nantes
+- écrit des projets perso et pro en Scala et en Haskell (notamment) depuis ~ 2 ans
 
 ![](img/escale.png)
-
-# Slide 2
-
-```javascript
-function map(tableau, transformation) {
-	return tableau.reduce(function(acc, cur) {
-		acc.push(transformation(cur));
-		return acc;
-	}, []);
-}
-
-function filter(tableau, predicat) {
-	return tableau.reduce(function(acc, cur) {
-		if (predicat(cur)) acc.push(cur);
-		return acc;
-	}, []);
-}
-```

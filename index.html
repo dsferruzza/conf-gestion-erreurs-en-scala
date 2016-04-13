@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <meta name="author" content="Optional subtitle" />
-  <title>Title</title>
+  <meta name="author" content="David Sferruzza" />
+  <meta name="dcterms.date" content="2016-12-04" />
+  <title>Gérer les erreurs avec l'aide du système de types de Scala !</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -29,41 +30,24 @@
   <div class="reveal">
     <div class="slides">
 
-<section>
-    <h1 class="title">Title</h1>
-    <h2 class="author">Optional subtitle</h2>
-    <h3 class="date">Author</h3>
 <section data-state="intro">
+    <h1 class="title">Gérer les erreurs avec l'aide du système de types de Scala !</h1>
+    <h2 class="author">David Sferruzza</h2>
+    <h3 class="date">22/04/2016</h3>
 </section>
 
-<section id="slide-1" class="slide level1">
-<h1>Slide 1</h1>
+<section id="à-propos-de-moi" class="slide level1">
+<h1>À propos de moi</h1>
 <ul>
-<li>item 1</li>
-<li>item 2</li>
-<li>item 3</li>
-<li>item 4</li>
-<li>item 4</li>
+<li><a href="https://twitter.com/d_sferruzza">@d_sferruzza</a></li>
+<li><a href="https://github.com/dsferruzza">github.com/dsferruzza</a></li>
+<li>développeur et responsable R&amp;D chez <a href="http://www.escaledigitale.com">Escale</a></li>
+<li>doctorant en génie logiciel à l'Université de Nantes</li>
+<li>écrit des projets perso et pro en Scala et en Haskell (notamment) depuis ~ 2 ans</li>
 </ul>
 <figure>
 <img src="img/escale.png" />
 </figure>
-</section>
-<section id="slide-2" class="slide level1">
-<h1>Slide 2</h1>
-<pre class="javascript"><code>function map(tableau, transformation) {
-    return tableau.reduce(function(acc, cur) {
-        acc.push(transformation(cur));
-        return acc;
-    }, []);
-}
-
-function filter(tableau, predicat) {
-    return tableau.reduce(function(acc, cur) {
-        if (predicat(cur)) acc.push(cur);
-        return acc;
-    }, []);
-}</code></pre>
 </section>
     </div>
     <div class="footer"><p>#DevoxxFR</p><img align="right" src="img/logo-texte-devoxx-france-400.png" /></div>
