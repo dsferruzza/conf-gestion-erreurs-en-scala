@@ -49,6 +49,60 @@
 <img src="img/escale.png" />
 </figure>
 </section>
+<section id="cas-dexemple" class="slide level1">
+<h1>Cas d'exemple</h1>
+<p>Un joueur est ajouté à notre application.</p>
+<pre class="json"><code>{ &quot;name&quot;: &quot;Batman&quot;, &quot;level&quot;: 99, &quot;hp&quot;: 85 }</code></pre>
+<p>Le JSON est parsé et les erreurs de structure gérées.</p>
+<pre class="scala"><code>case class Player(name: String, level: Int, hp: Int)</code></pre>
+<p>On veut valider ces données avec des critères métier.</p>
+<pre class="scala"><code>// On veut implémenter cette fonction
+def validate(player: Player): ValidPlayer = ???
+
+case class ValidPlayer(name: String, level: Int, hp: Int)
+// ^ Même structure que Player</code></pre>
+</section>
+<section id="cas-dexemple-1" class="slide level1">
+<h1>Cas d'exemple</h1>
+<pre class="scala"><code>case class Player(name: String,
+                  level: Int,
+                  hp: Int)</code></pre>
+<p>Pour qu'un joueur soit valide (et devienne un <code>ValidPlayer</code>), il doit respecter ces <em>3</em> critères :</p>
+<ul>
+<li>longueur de nom supérieur à 3 caractères</li>
+<li>niveau strictement positif</li>
+<li>moins de points de vie que <code>95 + niveau * 5</code></li>
+</ul>
+</section>
+<section id="cas-dexemple-2" class="slide level1">
+<h1>Cas d'exemple</h1>
+<p><code>validate</code> peut échouer à produire une valeur de type <code>ValidPlayer</code>.</p>
+<pre class="scala"><code>def validate(player: Player): ValidPlayer = ???</code></pre>
+<p>Comment le gérer ?</p>
+<blockquote>
+<p>Deux points de vue :</p>
+<ul>
+<li>définition de <code>validate</code></li>
+<li>appel de <code>validate</code></li>
+</ul>
+</blockquote>
+</section>
+<section id="null" class="slide level1">
+<h1>null</h1>
+<p>Si <code>validate</code> échoue, on renvoie <code>null</code>.</p>
+<pre class="scala"><code>def validate(player: Player): ValidPlayer = {
+  if ( /* ... */ ) {
+    ValidPlayer( /* ... */ )
+  }
+  else null
+}</code></pre>
+<pre class="scala"><code>val player = Player( /* ... */ )
+val validPlayer = validate(player)
+
+if (validPlayer != null) {
+  // On peut utiliser validPlayer
+}</code></pre>
+</section>
     </div>
     <div class="footer"><p>#DevoxxFR</p><img align="right" src="img/logo-texte-devoxx-france-400.png" /></div>
   </div>
