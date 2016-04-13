@@ -445,6 +445,9 @@ html.intro .reveal .slides section h3 {
   text-align: right;
   font-size: 0.6em; }
 
+.reveal .slides figure {
+  text-align: center; }
+
 /*
 
 Zenburn style from voldmar.ru (c) Vladimir Epifanov <voldmar@voldmar.ru>
