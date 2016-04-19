@@ -491,6 +491,18 @@ def validate(p: Player): ValidationNel[VE, ValidPlayer] = {
 Permet d'accumuler les erreurs lorsqu'on fait des validations indépendantes.
 
 
+# Rapture
+
+> Rapture is a family of Scala libraries providing beautiful idiomatic and typesafe Scala APIs for common programming tasks, like working with I/O, cryptography and JSON & XML processing.
+>
+> <http://rapture.io>
+
+```scala
+libraryDependencies +=
+  "com.propensive" %% "rapture-core" % "2.0.0-M5"
+```
+
+
 # rapture.modes (principe)
 
 - définir une fonction pouvant échouer et la wrapper avec Rapture

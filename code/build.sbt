@@ -14,3 +14,6 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.2.2"
+
+libraryDependencies +=
+  "com.propensive" %% "rapture-core" % "2.0.0-M5"
