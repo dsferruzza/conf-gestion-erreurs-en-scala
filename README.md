@@ -7,3 +7,8 @@ Gérer les erreurs avec l'aide du système de types de Scala !
 
 - installer [Pandoc](http://pandoc.org/)
 - générer les slides : `npm run build`
+
+## Tester le code
+
+- aller dans `code/`
+- `./bin/activator`
