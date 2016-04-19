@@ -388,6 +388,9 @@ scalaz.NonEmptyList(1, 2, 3)  // Compile</code></pre>
 </section>
 <section id="scalaz.validationnele-a" class="slide level1">
 <h1>scalaz.ValidationNel[E, A]</h1>
+<pre class="scala"><code>import scalaz.{ NonEmptyList, ValidationNel, Success, Failure }
+import scalaz.syntax.applicative._
+import scalaz.syntax.validation._</code></pre>
 <pre class="scala"><code>def validate(p: Player): ValidationNel[VE, ValidPlayer] = {
   val vName = if (validateName(p.name)) Success(p.name)
     else Failure[NonEmptyList[VE]](NonEmptyList(NameTooShort))
@@ -400,6 +403,16 @@ scalaz.NonEmptyList(1, 2, 3)  // Compile</code></pre>
       val e = TooManyHp(p.hp, 95 + p.level * 5)
       Failure[NonEmptyList[VE]](NonEmptyList(e))
     }
+
+  /* ... */
+}</code></pre>
+</section>
+<section id="scalaz.validationnele-a-1" class="slide level1">
+<h1>scalaz.ValidationNel[E, A]</h1>
+<pre class="scala"><code>def validate(p: Player): ValidationNel[VE, ValidPlayer] = {
+  val vName = /* ... */
+  val vLevel = /* ... */
+  val vHp = /* ... */
 
   (vName |@| vLevel |@| vHp) { (n, l, h) =&gt;
     ValidPlayer(n, l, h)

@@ -450,6 +450,12 @@ scalaz.NonEmptyList(1, 2, 3)  // Compile
 # scalaz.ValidationNel[E, A]
 
 ```scala
+import scalaz.{ NonEmptyList, ValidationNel, Success, Failure }
+import scalaz.syntax.applicative._
+import scalaz.syntax.validation._
+```
+
+```scala
 def validate(p: Player): ValidationNel[VE, ValidPlayer] = {
   val vName = if (validateName(p.name)) Success(p.name)
     else Failure[NonEmptyList[VE]](NonEmptyList(NameTooShort))
@@ -462,6 +468,19 @@ def validate(p: Player): ValidationNel[VE, ValidPlayer] = {
       val e = TooManyHp(p.hp, 95 + p.level * 5)
       Failure[NonEmptyList[VE]](NonEmptyList(e))
     }
+
+  /* ... */
+}
+```
+
+
+# scalaz.ValidationNel[E, A]
+
+```scala
+def validate(p: Player): ValidationNel[VE, ValidPlayer] = {
+  val vName = /* ... */
+  val vLevel = /* ... */
+  val vHp = /* ... */
 
   (vName |@| vLevel |@| vHp) { (n, l, h) =>
     ValidPlayer(n, l, h)
