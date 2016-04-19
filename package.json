@@ -2,7 +2,6 @@
   "name": "presentation-starter",
   "description": "A starter kit to make a presentation written in Markdown, using Pandoc and reveal.js",
   "dependencies": {
-    "pandoc-bin": "0.1.2",
     "watch-run": "1.2.4"
   },
   "devDependencies": {

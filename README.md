@@ -5,5 +5,5 @@ Gérer les erreurs avec l'aide du système de types de Scala !
 
 ## Générer la présentation
 
-- installer les dépendances : `npm install --production`
+- installer [Pandoc](http://pandoc.org/)
 - générer les slides : `npm run build`
