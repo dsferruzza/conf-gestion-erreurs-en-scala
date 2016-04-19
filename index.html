@@ -70,10 +70,8 @@ case class ValidPlayer(name: String, level: Int, hp: Int)
 <p>Pour qu'un joueur soit valide (et devienne un <code>ValidPlayer</code>), il doit respecter ces <strong>3</strong> critères :</p>
 <ul>
 <li>longueur de nom supérieur à 3 caractères</li>
-<li>niveau strictement positif
-<ul>
+<li>niveau strictement positif</li>
 <li>moins de points de vie que <code>95 + niveau * 5</code></li>
-</ul></li>
 </ul>
 </section>
 <section id="cas-dexemple-2" class="slide level1">
@@ -83,8 +81,8 @@ case class ValidPlayer(name: String, level: Int, hp: Int)
 <p>Niveau strictement positif :</p>
 <pre class="scala"><code>def validateLevel(level: Int): Boolean = level &gt; 0</code></pre>
 <p>Moins de points de vie que <code>95 + niveau * 5</code> :</p>
-<pre class="scala"><code>def validateHp(level: Int, hp: Int): Boolean = hp &lt;= 95 + level * 5
-// ^ N&#39;a de sens que si level &gt; 0</code></pre>
+<pre class="scala"><code>def validateHp(level: Int, hp: Int): Boolean =
+  hp &lt;= 95 + level * 5</code></pre>
 </section>
 <section id="cas-dexemple-3" class="slide level1">
 <h1>Cas d'exemple</h1>
@@ -125,6 +123,9 @@ if (validPlayer != null) {
 <figure class="stretch">
 <img src="img/ahhh.gif" alt="">
 </figure>
+<aside class="notes">
+<p>Billion Dollar Mistake</p>
+</aside>
 </section>
 <section id="null-2" class="slide level1">
 <h1>null</h1>
@@ -232,6 +233,21 @@ case class TooManyHp(current: Int, max: Int) extends VE</code></pre>
 <pre class="scala"><code>val e1: VE = NameTooShort
 val e2: VE = InvalidLevel
 val e3: VE = TooManyHp(current, max)</code></pre>
+<figure class="stretch">
+<img src="img/VE.svg" alt="">
+</figure>
+</section>
+<section id="quelques-options-utiles-du-compilateur" class="slide level1">
+<h1>Quelques options utiles du compilateur</h1>
+<pre class="scala"><code>scalacOptions ++= Seq(
+  &quot;-unchecked&quot;,
+  &quot;-deprecation&quot;,
+  &quot;-feature&quot;,
+  &quot;-Xfuture&quot;,
+  &quot;-Xlint&quot;,
+
+  &quot;-Xfatal-warnings&quot;
+)</code></pre>
 </section>
 <section id="optiona" class="slide level1">
 <h1>Option[A]</h1>
@@ -327,7 +343,7 @@ val validPlayer = validate(player) // Either[VE, ValidPlayer]</code></pre>
 </section>
 <section id="scalaz.a-b" class="slide level1">
 <h1>scalaz.\/[A, B]</h1>
-<pre class="scala"><code>import scalaz.{\/, -\/, \/-}</code></pre>
+<pre class="scala"><code>import scalaz.{ \/, -\/, \/- }</code></pre>
 <ul>
 <li><code>-\/(x: A)</code></li>
 <li><code>\/-(x: B)</code></li>
@@ -350,8 +366,8 @@ val validPlayer = validate(player) // Either[VE, ValidPlayer]</code></pre>
 <section id="scalaz.a-b-1" class="slide level1">
 <h1>scalaz.\/[A, B]</h1>
 <p>Similaire à <code>Either</code>, mais part du principe que la valeur intéressante est à droite (right-biased).</p>
-<pre class="scala"><code>eitherVal.right.map(/* ... */)
-disjunctionVal.map(/* ... */)</code></pre>
+<pre class="scala"><code>eitherVal.left.map(/* ... */)        eitherVal.right.map(/* ... */)
+disjunctionVal.leftMap(/* ... */)    disjunctionVal.map(/* ... */)</code></pre>
 <figure class="stretch">
 <img src="img/awesome.gif" alt="">
 </figure>
@@ -417,9 +433,11 @@ scalaz.NonEmptyList(1, 2, 3)  // Compile</code></pre>
 <figure class="stretch">
 <img src="img/question.gif" alt="">
 </figure>
-<p>Twitter : @d_sferruzza</p>
+<div style="text-align: center">
+<p>Twitter : <a href="https://twitter.com/d_sferruzza">@d_sferruzza</a></p>
 <p>Slides sur GitHub :</p>
 <p><a href="http://github.com/dsferruzza/conf-gestion-erreurs-en-scala">dsferruzza/conf-gestion-erreurs-en-scala</a></p>
+</div>
 </section>
     </div>
     <div class="footer"><p>#DevoxxFR</p><img align="right" src="img/logo-texte-devoxx-france-400.png" /></div>
