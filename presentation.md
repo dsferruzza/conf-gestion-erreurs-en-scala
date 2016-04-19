@@ -50,7 +50,7 @@ Pour qu'un joueur soit valide (et devienne un `ValidPlayer`), il doit respecter 
 
 - longueur de nom supérieur à 3 caractères
 - niveau strictement positif
-	- moins de points de vie que `95 + niveau * 5`
+- moins de points de vie que `95 + niveau * 5`
 
 
 # Cas d'exemple
@@ -67,8 +67,8 @@ def validateLevel(level: Int): Boolean = level > 0
 
 Moins de points de vie que `95 + niveau * 5` :
 ```scala
-def validateHp(level: Int, hp: Int): Boolean = hp <= 95 + level * 5
-// ^ N'a de sens que si level > 0
+def validateHp(level: Int, hp: Int): Boolean =
+  hp <= 95 + level * 5
 ```
 
 
@@ -125,6 +125,10 @@ java.lang.NullPointerException
 ```
 
 <figure class="stretch"><img src="img/ahhh.gif" alt=""></figure>
+
+<div class="notes">
+Billion Dollar Mistake
+</div>
 
 
 # null
@@ -244,6 +248,23 @@ case class TooManyHp(current: Int, max: Int) extends VE
 val e1: VE = NameTooShort
 val e2: VE = InvalidLevel
 val e3: VE = TooManyHp(current, max)
+```
+
+<figure class="stretch"><img src="img/VE.svg" alt=""></figure>
+
+
+# Quelques options utiles du compilateur
+
+```scala
+scalacOptions ++= Seq(
+  "-unchecked",
+  "-deprecation",
+  "-feature",
+  "-Xfuture",
+  "-Xlint",
+
+  "-Xfatal-warnings"
+)
 ```
 
 
@@ -372,7 +393,7 @@ libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.2.2"
 # scalaz.\\/[A, B]
 
 ```scala
-import scalaz.{\/, -\/, \/-}
+import scalaz.{ \/, -\/, \/- }
 ```
 
 - `-\/(x: A)`
@@ -401,8 +422,8 @@ def validate(player: Player): VE \/ ValidPlayer = {
 Similaire à `Either`, mais part du principe que la valeur intéressante est à droite (right-biased).
 
 ```scala
-eitherVal.right.map(/* ... */)
-disjunctionVal.map(/* ... */)
+eitherVal.left.map(/* ... */)        eitherVal.right.map(/* ... */)
+disjunctionVal.leftMap(/* ... */)    disjunctionVal.map(/* ... */)
 ```
 
 <figure class="stretch"><img src="img/awesome.gif" alt=""></figure>
@@ -475,8 +496,10 @@ Utiliser correctement ces types pour gérer les erreurs permet :
 
 <figure class="stretch"><img src="img/question.gif" alt=""></figure>
 
-Twitter : \@d_sferruzza
+<div style="text-align: center">
+Twitter : [\@d_sferruzza](https://twitter.com/d\_sferruzza)
 
 Slides sur GitHub :
 
 [dsferruzza/conf-gestion-erreurs-en-scala](http://github.com/dsferruzza/conf-gestion-erreurs-en-scala)
+</div>
