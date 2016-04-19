@@ -19,6 +19,7 @@ if [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then
 	FILE[1]="img/"
 	FILE[2]="*.css"
 	FILE[3]="lib/"
+	FILE[4]="fonts/"
 
 	for F in ${FILE[*]}
 	do
