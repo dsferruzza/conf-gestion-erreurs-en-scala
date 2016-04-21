@@ -366,8 +366,8 @@ val validPlayer = validate(player) // Either[VE, ValidPlayer]</code></pre>
 <section id="scalaz.a-b-1" class="slide level1">
 <h1>scalaz.\/[A, B]</h1>
 <p>Similaire à <code>Either</code>, mais part du principe que la valeur intéressante est à droite (right-biased).</p>
-<pre class="scala"><code>eitherVal.left.map(/* ... */)        eitherVal.right.map(/* ... */)
-disjunctionVal.leftMap(/* ... */)    disjunctionVal.map(/* ... */)</code></pre>
+<pre class="scala"><code>eitherVal.left.map(/* ... */)       eitherVal.right.map(/* ... */)
+disjunctionVal.leftMap(/* ... */)   disjunctionVal.map(/* ... */)</code></pre>
 <figure class="stretch">
 <img src="img/awesome.gif" alt="">
 </figure>
@@ -419,6 +419,9 @@ import scalaz.syntax.validation._</code></pre>
   }
 }</code></pre>
 <p>Permet d'accumuler les erreurs lorsqu'on fait des validations indépendantes.</p>
+<figure class="stretch">
+<img src="img/stack.gif" alt="">
+</figure>
 </section>
 <section id="rapture" class="slide level1">
 <h1>Rapture</h1>
@@ -429,15 +432,64 @@ import scalaz.syntax.validation._</code></pre>
 <pre class="scala"><code>libraryDependencies +=
   &quot;com.propensive&quot; %% &quot;rapture-core&quot; % &quot;2.0.0-M5&quot;</code></pre>
 </section>
-<section id="rapture.modes-principe" class="slide level1">
-<h1>rapture.modes (principe)</h1>
+<section id="rapture.modes" class="slide level1">
+<h1>rapture.modes</h1>
+<pre class="scala"><code>import rapture.core._</code></pre>
+<p>On <em>wrap</em> notre fonction <code>validate</code> qui renvoie un <code>Either</code>.</p>
+<pre class="scala"><code>def validate(player: Player)(implicit mode: Mode[_]):
+                            mode.Wrap[ValidPlayer, VE] = {
+  mode.wrapEither(validateEither(player))
+  //              ^
+  // def validateEither(p: Player): Either[VE, ValidPlayer]
+}</code></pre>
+<figure class="stretch">
+<img src="img/wrap.gif" alt="">
+</figure>
+</section>
+<section id="rapture.modes-1" class="slide level1">
+<h1>rapture.modes</h1>
+<p>On importe un <em>mode</em> à l'endroit de l'appel.</p>
+<p>Par exemple, <code>returnOption</code> :</p>
+<pre class="scala"><code>def validateOption(player: Player): Option[ValidPlayer] = {
+  import modes.returnOption._
+  validate(player)
+}</code></pre>
+<p>Ou <code>returnTry</code> :</p>
+<pre class="scala"><code>def validateTry(player: Player): Try[ValidPlayer] = {
+  import modes.returnTry._
+  validate(player)
+}</code></pre>
+</section>
+<section id="rapture.modes-2" class="slide level1">
+<h1>rapture.modes</h1>
+<p>Modes actuellement disponibles :</p>
+<pre class="scala"><code>modes.throwExceptions._ // default
+modes.returnEither._ //missing?
+modes.returnOption._
+modes.returnTry._
+modes.returnFuture._
+modes.timeExecution._
+modes.keepCalmAndCarryOn._
+modes.explicit._</code></pre>
+</section>
+<section id="rapture.modes-3" class="slide level1">
+<h1>rapture.modes</h1>
+<blockquote>
+<p>Orignal, mais pas prêt pour la production.</p>
+</blockquote>
+</section>
+<section id="résumé" class="slide level1">
+<h1>Résumé</h1>
 <ul>
-<li>définir une fonction pouvant échouer et la wrapper avec Rapture</li>
-<li>au niveau de l'appel de la fonction, choisir le mode désiré (<code>import modes.returnEither._</code>)</li>
-<li>la fonction va renvoyer un <code>Either</code> !</li>
+<li><span style="color: red">null</span></li>
+<li><span style="color: red">Exceptions</span></li>
+<li><span style="color: green"><strong>Option[A]</strong></span></li>
+<li>Either[A, B]</li>
+<li>Try[T]</li>
+<li><span style="color: green"><strong>scalaz.\/[A, B]</strong></span></li>
+<li><span style="color: green"><strong>scalaz.ValidationNel[E, A]</strong></span></li>
+<li><span style="color: red">rapture.modes</span></li>
 </ul>
-<p>GitHub : <a href="https://github.com/propensive/rapture-core">propensive/rapture-core</a></p>
-<p><a href="http://blog.scalac.io/2015/05/28/scala-modes.html" class="uri">http://blog.scalac.io/2015/05/28/scala-modes.html</a></p>
 </section>
 <section id="conclusion" class="slide level1">
 <h1>Conclusion</h1>
