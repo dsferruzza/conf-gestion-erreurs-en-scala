@@ -517,7 +517,7 @@ On *wrap* notre fonction `validate` qui renvoie un `Either`.
 def validate(player: Player)(implicit mode: Mode[_]):
                             mode.Wrap[ValidPlayer, VE] = {
   mode.wrapEither(validateEither(player))
-  //              ^
+  //              ^^^^^^^^^^^^^^
   // def validateEither(p: Player): Either[VE, ValidPlayer]
 }
 ```
@@ -568,8 +568,12 @@ modes.explicit._
 
 > Orignal, mais pas prêt pour la production.
 
+<figure class="stretch"><img src="img/disappointed.gif" alt=""></figure>
+
 
 # Résumé
+
+Pour gérer les erreurs métier :
 
 - <span style="color: red">null</span>
 - <span style="color: red">Exceptions</span>
@@ -585,7 +589,7 @@ modes.explicit._
 
 Utiliser correctement ces types pour gérer les erreurs permet :
 
-- d'afficher clairement le contrat d'une fonction (pure)
+- d'afficher clairement le contrat d'une fonction (pure), documenter
 - d'avoir une vérification de cohérence par le compilateur
 
 <figure class="stretch"><img src="img/excellent.gif" alt=""></figure>

@@ -439,7 +439,7 @@ import scalaz.syntax.validation._</code></pre>
 <pre class="scala"><code>def validate(player: Player)(implicit mode: Mode[_]):
                             mode.Wrap[ValidPlayer, VE] = {
   mode.wrapEither(validateEither(player))
-  //              ^
+  //              ^^^^^^^^^^^^^^
   // def validateEither(p: Player): Either[VE, ValidPlayer]
 }</code></pre>
 <figure class="stretch">
@@ -477,9 +477,13 @@ modes.explicit._</code></pre>
 <blockquote>
 <p>Orignal, mais pas prêt pour la production.</p>
 </blockquote>
+<figure class="stretch">
+<img src="img/disappointed.gif" alt="">
+</figure>
 </section>
 <section id="résumé" class="slide level1">
 <h1>Résumé</h1>
+<p>Pour gérer les erreurs métier :</p>
 <ul>
 <li><span style="color: red">null</span></li>
 <li><span style="color: red">Exceptions</span></li>
@@ -495,7 +499,7 @@ modes.explicit._</code></pre>
 <h1>Conclusion</h1>
 <p>Utiliser correctement ces types pour gérer les erreurs permet :</p>
 <ul>
-<li>d'afficher clairement le contrat d'une fonction (pure)</li>
+<li>d'afficher clairement le contrat d'une fonction (pure), documenter</li>
 <li>d'avoir une vérification de cohérence par le compilateur</li>
 </ul>
 <figure class="stretch">
