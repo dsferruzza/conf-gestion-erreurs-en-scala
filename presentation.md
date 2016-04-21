@@ -422,8 +422,8 @@ def validate(player: Player): VE \/ ValidPlayer = {
 Similaire à `Either`, mais part du principe que la valeur intéressante est à droite (right-biased).
 
 ```scala
-eitherVal.left.map(/* ... */)        eitherVal.right.map(/* ... */)
-disjunctionVal.leftMap(/* ... */)    disjunctionVal.map(/* ... */)
+eitherVal.left.map(/* ... */)       eitherVal.right.map(/* ... */)
+disjunctionVal.leftMap(/* ... */)   disjunctionVal.map(/* ... */)
 ```
 
 <figure class="stretch"><img src="img/awesome.gif" alt=""></figure>
@@ -490,6 +490,8 @@ def validate(p: Player): ValidationNel[VE, ValidPlayer] = {
 
 Permet d'accumuler les erreurs lorsqu'on fait des validations indépendantes.
 
+<figure class="stretch"><img src="img/stack.gif" alt=""></figure>
+
 
 # Rapture
 
@@ -503,15 +505,80 @@ libraryDependencies +=
 ```
 
 
-# rapture.modes (principe)
+# rapture.modes
 
-- définir une fonction pouvant échouer et la wrapper avec Rapture
-- au niveau de l'appel de la fonction, choisir le mode désiré (`import modes.returnEither._`)
-- la fonction va renvoyer un `Either` !
+```scala
+import rapture.core._
+```
 
-GitHub : [propensive/rapture-core](https://github.com/propensive/rapture-core)
+On *wrap* notre fonction `validate` qui renvoie un `Either`.
 
-[http://blog.scalac.io/2015/05/28/scala-modes.html](http://blog.scalac.io/2015/05/28/scala-modes.html)
+```scala
+def validate(player: Player)(implicit mode: Mode[_]):
+                            mode.Wrap[ValidPlayer, VE] = {
+  mode.wrapEither(validateEither(player))
+  //              ^
+  // def validateEither(p: Player): Either[VE, ValidPlayer]
+}
+```
+
+<figure class="stretch"><img src="img/wrap.gif" alt=""></figure>
+
+
+# rapture.modes
+
+On importe un *mode* à l'endroit de l'appel.
+
+Par exemple, `returnOption` :
+
+```scala
+def validateOption(player: Player): Option[ValidPlayer] = {
+  import modes.returnOption._
+  validate(player)
+}
+```
+
+Ou `returnTry` :
+
+```scala
+def validateTry(player: Player): Try[ValidPlayer] = {
+  import modes.returnTry._
+  validate(player)
+}
+```
+
+
+# rapture.modes
+
+Modes actuellement disponibles :
+
+```scala
+modes.throwExceptions._ // default
+modes.returnEither._ //missing?
+modes.returnOption._
+modes.returnTry._
+modes.returnFuture._
+modes.timeExecution._
+modes.keepCalmAndCarryOn._
+modes.explicit._
+```
+
+
+# rapture.modes
+
+> Orignal, mais pas prêt pour la production.
+
+
+# Résumé
+
+- <span style="color: red">null</span>
+- <span style="color: red">Exceptions</span>
+- <span style="color: green">**Option[A]**</span>
+- Either[A, B]
+- Try[T]
+- <span style="color: green">**scalaz.\\/[A, B]**</span>
+- <span style="color: green">**scalaz.ValidationNel[E, A]**</span>
+- <span style="color: red">rapture.modes</span>
 
 
 # Conclusion
