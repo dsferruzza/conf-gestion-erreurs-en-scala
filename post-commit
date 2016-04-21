@@ -2,6 +2,8 @@
 
 # Check if the commit is done on master branch
 if [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then
+	git stash
+
 	# Checkout the gh-pages branch
 	if [ "$(git branch --list --no-color gh-pages)" = "  gh-pages" ]; then
 		git checkout gh-pages
@@ -29,4 +31,5 @@ if [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then
 	git commit -am "Get content from master branch"
 
 	git checkout master
+	git stash pop
 fi
