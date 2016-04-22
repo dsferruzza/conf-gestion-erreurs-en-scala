@@ -563,6 +563,8 @@ modes.keepCalmAndCarryOn._
 modes.explicit._
 ```
 
+<figure class="stretch"><img src="img/bioshock.jpg" alt=""></figure>
+
 
 # rapture.modes
 
@@ -601,7 +603,7 @@ Utiliser correctement ces types pour gérer les erreurs permet :
 <div style="text-align: center">
 Twitter : [\@d_sferruzza](https://twitter.com/d\_sferruzza)
 
-Slides sur GitHub :
+Slides (et code) sur GitHub :
 
 [dsferruzza/conf-gestion-erreurs-en-scala](http://github.com/dsferruzza/conf-gestion-erreurs-en-scala)
 </div>
