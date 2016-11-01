@@ -6,11 +6,10 @@
 
 - [\@d_sferruzza](https://twitter.com/d\_sferruzza)
 - [github.com/dsferruzza](https://github.com/dsferruzza)
-- développeur et responsable R&D chez [Escale](http://www.escaledigitale.com)
-- doctorant en génie logiciel à l'Université de Nantes
-- écrit des projets perso et pro en Scala et en Haskell (notamment) depuis ~ 2 ans
+- Responsable R&D chez [Startup Palace](http://www.startup-palace.com)
+- Doctorant en génie logiciel à l'Université de Nantes
 
-![](img/escale.png)
+<figure class="stretch"><img src="img/sp.gif" alt=""></figure>
 
 
 # Cas d'exemple
@@ -145,6 +144,7 @@ De manière générale :
 
 # Exceptions
 
+<div class="smallcode">
 ```scala
 def validate(player: Player): ValidPlayer = {
   if (!validateName(player.name)) {
@@ -169,6 +169,7 @@ catch {
   case e: RuntimeException => /* Réparer ou propager l'erreur */
 }
 ```
+</div>
 
 
 # Exceptions
@@ -190,6 +191,7 @@ Pas de `checked exceptions` en Scala.
 
 - `throw` stoppe l'exécution de la fonction
 - si on oublie le `try`/`catch`, l'exception se propage
+- le pattern `catch` `>` `/dev/null` #vuDansLaVraieVie
 - `throw` est de type `Nothing`
 
 Pas très adapté pour gérer des erreurs métier *prévisibles*...
@@ -227,15 +229,17 @@ Algébrique ?
 
 <div class="notes">
 - "Algébrique" parce le type algébrique de données est définit par des opérations "algébriques"
+- algèbre ~= ensemble de fonctions/d'opérations qui reposent sur des propriétés/lois
 </div>
 
 
 # Nos erreurs métier
 
+<div class="smallcode">
 ```scala
-sealed trait VE
-//           ^^ Pour ValidationError
-// ^^^ Très important !
+abstract sealed trait VE
+//                    ^^ Pour ValidationError
+//       ^^^ Très important !
 ```
 ```scala
 case object NameTooShort extends VE
@@ -249,6 +253,7 @@ val e1: VE = NameTooShort
 val e2: VE = InvalidLevel
 val e3: VE = TooManyHp(current, max)
 ```
+</div>
 
 <figure class="stretch"><img src="img/VE.svg" alt=""></figure>
 
@@ -287,26 +292,25 @@ Suffisant si on n'a pas besoin d'information sur l'erreur.
 
 # Option[A] => A
 
+<div class="smallcode">
 ```scala
 val player = Player( /* ... */ )
 val validPlayer = validate(player) // Option[ValidPlayer]
 ```
+</div>
 
-Modifier sans traiter l'erreur :
 ```scala
-val playerName = validPlayer.map(p => p.name) // Option[String]
-```
+// Modifier sans traiter l'erreur :
+val playerName = validPlayer.map(p => p.name)
+//  ^ Option[String]
 
-Accéder à la valeur :
-```scala
+// Accéder à la valeur :
 validPlayer match {
   case None    => // On gère l'erreur
   case Some(p) => // On peut utiliser p
 }
-```
 
-Fournir une valeur par défaut :
-```scala
+// Fournir une valeur par défaut :
 playerName.getOrElse(Player( /* ... */ ))
 ```
 
@@ -320,6 +324,7 @@ import scala.util.Either
 - `Left(x: A)`
 - `Right(x: B)`
 
+<div class="smallcode">
 ```scala
 def validate(player: Player): Either[VE, ValidPlayer] = {
   if (!validateName(player.name)) {
@@ -336,28 +341,29 @@ def validate(player: Player): Either[VE, ValidPlayer] = {
   }
 }
 ```
+</div>
 
 
 # Either[A, B]
 
+<div class="smallcode">
 ```scala
 val player = Player( /* ... */ )
 val validPlayer = validate(player) // Either[VE, ValidPlayer]
 ```
+</div>
 
-Modifier sans traiter l'erreur :
 ```scala
+// Modifier sans traiter l'erreur :
 val playerName = validPlayer.right.map(p => p.name)
 //  ^ Either[VE, String]
 //                          ^^^^^^ Pas dingue :/
-```
 
-```scala
 validPlayer match {
-  case Right(p)                         => // On peut utiliser p
-  case Left(NameTooShort)               => // On gère l'erreur
-  case Left(InvalidLevel)               => // On gère l'erreur
-  case Left(TooManyHp(current, max))    => // On gère l'erreur
+  case Right(p)                      => // On peut utiliser p
+  case Left(NameTooShort)            => // On gère l'erreur
+  case Left(InvalidLevel)            => // On gère l'erreur
+  case Left(TooManyHp(current, max)) => // On gère l'erreur
   // Warning du compilateur si on oublie un cas \o/
 }
 ```
@@ -382,7 +388,7 @@ Similaire à `Either` :
 > <https://github.com/scalaz/scalaz>
 
 ```scala
-libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.2.2"
+libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.2.7"
 ```
 
 - `\/` (disjunction)
@@ -399,6 +405,7 @@ import scalaz.{ \/, -\/, \/- }
 - `-\/(x: A)`
 - `\/-(x: B)`
 
+<div class="smallcode">
 ```scala
 def validate(player: Player): VE \/ ValidPlayer = {
   if (!validateName(player.name)) {
@@ -415,16 +422,19 @@ def validate(player: Player): VE \/ ValidPlayer = {
   }
 }
 ```
+</div>
 
 
 # scalaz.\\/[A, B]
 
 Similaire à `Either`, mais part du principe que la valeur intéressante est à droite (right-biased).
 
+<div class="smallcode">
 ```scala
 eitherVal.left.map(/* ... */)       eitherVal.right.map(/* ... */)
 disjunctionVal.leftMap(/* ... */)   disjunctionVal.map(/* ... */)
 ```
+</div>
 
 <figure class="stretch"><img src="img/awesome.gif" alt=""></figure>
 
@@ -455,6 +465,7 @@ import scalaz.syntax.applicative._
 import scalaz.syntax.validation._
 ```
 
+<div class="smallcode">
 ```scala
 def validate(p: Player): ValidationNel[VE, ValidPlayer] = {
   val vName = if (validateName(p.name)) Success(p.name)
@@ -472,10 +483,12 @@ def validate(p: Player): ValidationNel[VE, ValidPlayer] = {
   /* ... */
 }
 ```
+</div>
 
 
 # scalaz.ValidationNel[E, A]
 
+<div class="smallcode">
 ```scala
 def validate(p: Player): ValidationNel[VE, ValidPlayer] = {
   val vName = /* ... */
@@ -487,6 +500,7 @@ def validate(p: Player): ValidationNel[VE, ValidPlayer] = {
   }
 }
 ```
+</div>
 
 Permet d'accumuler les erreurs lorsqu'on fait des validations indépendantes.
 
@@ -501,7 +515,7 @@ Permet d'accumuler les erreurs lorsqu'on fait des validations indépendantes.
 
 ```scala
 libraryDependencies +=
-  "com.propensive" %% "rapture-core" % "2.0.0-M5"
+  "com.propensive" %% "rapture-core" % "2.0.0-M7"
 ```
 
 
@@ -550,7 +564,7 @@ def validateTry(player: Player): Try[ValidPlayer] = {
 
 # rapture.modes
 
-Modes actuellement disponibles :
+Quelques modes actuellement disponibles :
 
 ```scala
 modes.throwExceptions._ // default
@@ -580,7 +594,8 @@ Pour gérer les erreurs métier :
 - <span style="color: red">null</span>
 - <span style="color: red">Exceptions</span>
 - <span style="color: green">**Option[A]**</span>
-- Either[A, B]
+- Either[A, B] (*Scala < 2.12*)
+- <span style="color: green">Either[A, B] (*Scala 2.12*)</span>
 - Try[T]
 - <span style="color: green">**scalaz.\\/[A, B]**</span>
 - <span style="color: green">**scalaz.ValidationNel[E, A]**</span>
