@@ -39,12 +39,11 @@
 <ul>
 <li><a href="https://twitter.com/d_sferruzza">@d_sferruzza</a></li>
 <li><a href="https://github.com/dsferruzza">github.com/dsferruzza</a></li>
-<li>développeur et responsable R&amp;D chez <a href="http://www.escaledigitale.com">Escale</a></li>
-<li>doctorant en génie logiciel à l'Université de Nantes</li>
-<li>écrit des projets perso et pro en Scala et en Haskell (notamment) depuis ~ 2 ans</li>
+<li>Responsable R&amp;D chez <a href="http://www.startup-palace.com">Startup Palace</a></li>
+<li>Doctorant en génie logiciel à l'Université de Nantes</li>
 </ul>
-<figure>
-<img src="img/escale.png" />
+<figure class="stretch">
+<img src="img/sp.gif" alt="">
 </figure>
 </section>
 <section id="cas-dexemple" class="slide level1">
@@ -141,6 +140,7 @@ if (validPlayer != null) {
 </section>
 <section id="exceptions" class="slide level1">
 <h1>Exceptions</h1>
+<div class="smallcode">
 <pre class="scala"><code>def validate(player: Player): ValidPlayer = {
   if (!validateName(player.name)) {
     throw new RuntimeException(&quot;Invalid name&quot;)
@@ -160,6 +160,7 @@ if (validPlayer != null) {
 catch {
   case e: RuntimeException =&gt; /* Réparer ou propager l&#39;erreur */
 }</code></pre>
+</div>
 </section>
 <section id="exceptions-1" class="slide level1">
 <h1>Exceptions</h1>
@@ -181,6 +182,7 @@ catch {
 <ul>
 <li><code>throw</code> stoppe l'exécution de la fonction</li>
 <li>si on oublie le <code>try</code>/<code>catch</code>, l'exception se propage</li>
+<li>le pattern <code>catch</code> <code>&gt;</code> <code>/dev/null</code> #vuDansLaVraieVie</li>
 <li><code>throw</code> est de type <code>Nothing</code></li>
 </ul>
 <p>Pas très adapté pour gérer des erreurs métier <em>prévisibles</em>...</p>
@@ -216,14 +218,16 @@ catch {
 <aside class="notes">
 <ul>
 <li>&quot;Algébrique&quot; parce le type algébrique de données est définit par des opérations &quot;algébriques&quot;</li>
+<li>algèbre ~= ensemble de fonctions/d'opérations qui reposent sur des propriétés/lois</li>
 </ul>
 </aside>
 </section>
 <section id="nos-erreurs-métier" class="slide level1">
 <h1>Nos erreurs métier</h1>
-<pre class="scala"><code>sealed trait VE
-//           ^^ Pour ValidationError
-// ^^^ Très important !</code></pre>
+<div class="smallcode">
+<pre class="scala"><code>abstract sealed trait VE
+//                    ^^ Pour ValidationError
+//       ^^^ Très important !</code></pre>
 <pre class="scala"><code>case object NameTooShort extends VE
 case object InvalidLevel extends VE
 case class TooManyHp(current: Int, max: Int) extends VE</code></pre>
@@ -231,6 +235,7 @@ case class TooManyHp(current: Int, max: Int) extends VE</code></pre>
 <pre class="scala"><code>val e1: VE = NameTooShort
 val e2: VE = InvalidLevel
 val e3: VE = TooManyHp(current, max)</code></pre>
+</div>
 <figure class="stretch">
 <img src="img/VE.svg" alt="">
 </figure>
@@ -263,17 +268,22 @@ val e3: VE = TooManyHp(current, max)</code></pre>
 </section>
 <section id="optiona-a" class="slide level1">
 <h1>Option[A] =&gt; A</h1>
+<div class="smallcode">
 <pre class="scala"><code>val player = Player( /* ... */ )
 val validPlayer = validate(player) // Option[ValidPlayer]</code></pre>
-<p>Modifier sans traiter l'erreur :</p>
-<pre class="scala"><code>val playerName = validPlayer.map(p =&gt; p.name) // Option[String]</code></pre>
-<p>Accéder à la valeur :</p>
-<pre class="scala"><code>validPlayer match {
+</div>
+<pre class="scala"><code>// Modifier sans traiter l&#39;erreur :
+val playerName = validPlayer.map(p =&gt; p.name)
+//  ^ Option[String]
+
+// Accéder à la valeur :
+validPlayer match {
   case None    =&gt; // On gère l&#39;erreur
   case Some(p) =&gt; // On peut utiliser p
-}</code></pre>
-<p>Fournir une valeur par défaut :</p>
-<pre class="scala"><code>playerName.getOrElse(Player( /* ... */ ))</code></pre>
+}
+
+// Fournir une valeur par défaut :
+playerName.getOrElse(Player( /* ... */ ))</code></pre>
 </section>
 <section id="eithera-b" class="slide level1">
 <h1>Either[A, B]</h1>
@@ -282,6 +292,7 @@ val validPlayer = validate(player) // Option[ValidPlayer]</code></pre>
 <li><code>Left(x: A)</code></li>
 <li><code>Right(x: B)</code></li>
 </ul>
+<div class="smallcode">
 <pre class="scala"><code>def validate(player: Player): Either[VE, ValidPlayer] = {
   if (!validateName(player.name)) {
     Left(NameTooShort)
@@ -296,20 +307,24 @@ val validPlayer = validate(player) // Option[ValidPlayer]</code></pre>
     Right(ValidPlayer(player.name, player.level, player.hp))
   }
 }</code></pre>
+</div>
 </section>
 <section id="eithera-b-1" class="slide level1">
 <h1>Either[A, B]</h1>
+<div class="smallcode">
 <pre class="scala"><code>val player = Player( /* ... */ )
 val validPlayer = validate(player) // Either[VE, ValidPlayer]</code></pre>
-<p>Modifier sans traiter l'erreur :</p>
-<pre class="scala"><code>val playerName = validPlayer.right.map(p =&gt; p.name)
+</div>
+<pre class="scala"><code>// Modifier sans traiter l&#39;erreur :
+val playerName = validPlayer.right.map(p =&gt; p.name)
 //  ^ Either[VE, String]
-//                          ^^^^^^ Pas dingue :/</code></pre>
-<pre class="scala"><code>validPlayer match {
-  case Right(p)                         =&gt; // On peut utiliser p
-  case Left(NameTooShort)               =&gt; // On gère l&#39;erreur
-  case Left(InvalidLevel)               =&gt; // On gère l&#39;erreur
-  case Left(TooManyHp(current, max))    =&gt; // On gère l&#39;erreur
+//                          ^^^^^^ Pas dingue :/
+
+validPlayer match {
+  case Right(p)                      =&gt; // On peut utiliser p
+  case Left(NameTooShort)            =&gt; // On gère l&#39;erreur
+  case Left(InvalidLevel)            =&gt; // On gère l&#39;erreur
+  case Left(TooManyHp(current, max)) =&gt; // On gère l&#39;erreur
   // Warning du compilateur si on oublie un cas \o/
 }</code></pre>
 </section>
@@ -332,7 +347,7 @@ val validPlayer = validate(player) // Either[VE, ValidPlayer]</code></pre>
 <p>An extension to the core Scala library for functional programming.</p>
 <p><a href="https://github.com/scalaz/scalaz" class="uri">https://github.com/scalaz/scalaz</a></p>
 </blockquote>
-<pre class="scala"><code>libraryDependencies += &quot;org.scalaz&quot; %% &quot;scalaz-core&quot; % &quot;7.2.2&quot;</code></pre>
+<pre class="scala"><code>libraryDependencies += &quot;org.scalaz&quot; %% &quot;scalaz-core&quot; % &quot;7.2.7&quot;</code></pre>
 <ul>
 <li><code>\/</code> (disjunction)</li>
 <li><code>NonEmptyList</code></li>
@@ -346,6 +361,7 @@ val validPlayer = validate(player) // Either[VE, ValidPlayer]</code></pre>
 <li><code>-\/(x: A)</code></li>
 <li><code>\/-(x: B)</code></li>
 </ul>
+<div class="smallcode">
 <pre class="scala"><code>def validate(player: Player): VE \/ ValidPlayer = {
   if (!validateName(player.name)) {
     -\/(NameTooShort)
@@ -360,12 +376,15 @@ val validPlayer = validate(player) // Either[VE, ValidPlayer]</code></pre>
     \/-(ValidPlayer(player.name, player.level, player.hp))
   }
 }</code></pre>
+</div>
 </section>
 <section id="scalaz.a-b-1" class="slide level1">
 <h1>scalaz.\/[A, B]</h1>
 <p>Similaire à <code>Either</code>, mais part du principe que la valeur intéressante est à droite (right-biased).</p>
+<div class="smallcode">
 <pre class="scala"><code>eitherVal.left.map(/* ... */)       eitherVal.right.map(/* ... */)
 disjunctionVal.leftMap(/* ... */)   disjunctionVal.map(/* ... */)</code></pre>
+</div>
 <figure class="stretch">
 <img src="img/awesome.gif" alt="">
 </figure>
@@ -389,6 +408,7 @@ scalaz.NonEmptyList(1, 2, 3)  // Compile</code></pre>
 <pre class="scala"><code>import scalaz.{ NonEmptyList, ValidationNel, Success, Failure }
 import scalaz.syntax.applicative._
 import scalaz.syntax.validation._</code></pre>
+<div class="smallcode">
 <pre class="scala"><code>def validate(p: Player): ValidationNel[VE, ValidPlayer] = {
   val vName = if (validateName(p.name)) Success(p.name)
     else Failure[NonEmptyList[VE]](NonEmptyList(NameTooShort))
@@ -404,9 +424,11 @@ import scalaz.syntax.validation._</code></pre>
 
   /* ... */
 }</code></pre>
+</div>
 </section>
 <section id="scalaz.validationnele-a-1" class="slide level1">
 <h1>scalaz.ValidationNel[E, A]</h1>
+<div class="smallcode">
 <pre class="scala"><code>def validate(p: Player): ValidationNel[VE, ValidPlayer] = {
   val vName = /* ... */
   val vLevel = /* ... */
@@ -416,6 +438,7 @@ import scalaz.syntax.validation._</code></pre>
     ValidPlayer(n, l, h)
   }
 }</code></pre>
+</div>
 <p>Permet d'accumuler les erreurs lorsqu'on fait des validations indépendantes.</p>
 <figure class="stretch">
 <img src="img/stack.gif" alt="">
@@ -428,7 +451,7 @@ import scalaz.syntax.validation._</code></pre>
 <p><a href="http://rapture.io" class="uri">http://rapture.io</a></p>
 </blockquote>
 <pre class="scala"><code>libraryDependencies +=
-  &quot;com.propensive&quot; %% &quot;rapture-core&quot; % &quot;2.0.0-M5&quot;</code></pre>
+  &quot;com.propensive&quot; %% &quot;rapture-core&quot; % &quot;2.0.0-M7&quot;</code></pre>
 </section>
 <section id="rapture.modes" class="slide level1">
 <h1>rapture.modes</h1>
@@ -460,7 +483,7 @@ import scalaz.syntax.validation._</code></pre>
 </section>
 <section id="rapture.modes-2" class="slide level1">
 <h1>rapture.modes</h1>
-<p>Modes actuellement disponibles :</p>
+<p>Quelques modes actuellement disponibles :</p>
 <pre class="scala"><code>modes.throwExceptions._ // default
 modes.returnEither._ //missing?
 modes.returnOption._
@@ -489,7 +512,8 @@ modes.explicit._</code></pre>
 <li><span style="color: red">null</span></li>
 <li><span style="color: red">Exceptions</span></li>
 <li><span style="color: green"><strong>Option[A]</strong></span></li>
-<li>Either[A, B]</li>
+<li>Either[A, B] (<em>Scala &lt; 2.12</em>)</li>
+<li><span style="color: green">Either[A, B] (<em>Scala 2.12</em>)</span></li>
 <li>Try[T]</li>
 <li><span style="color: green"><strong>scalaz.\/[A, B]</strong></span></li>
 <li><span style="color: green"><strong>scalaz.ValidationNel[E, A]</strong></span></li>
