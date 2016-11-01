@@ -3,24 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <meta name="author" content="David Sferruzza" />
-  <meta name="dcterms.date" content="2016-12-04" />
+  <meta name="author" content="David Sferruzza">
   <title>Gérer les erreurs avec l'aide du système de types de Scala !</title>
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link rel="stylesheet" href="lib/reveal.js/css/reveal.css"/>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="lib/reveal.js/css/reveal.css">
   <style type="text/css">code{white-space: pre;}</style>
-  <link rel="stylesheet" href="devoxx.css" id="theme">
-  <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+  <link rel="stylesheet" href="sp.css" id="theme">
+  <!-- Printing and PDF exports -->
   <script>
-    if( window.location.search.match( /print-pdf/gi ) ) {
-      var link = document.createElement( 'link' );
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = 'lib/reveal.js/css/print/pdf.css';
-      document.getElementsByTagName( 'head' )[0].appendChild( link );
-    }
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'lib/reveal.js/css/print/pdf.css' : 'lib/reveal.js/css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
   </script>
   <!--[if lt IE 9]>
   <script src="lib/reveal.js/lib/js/html5shiv.js"></script>
@@ -30,10 +27,10 @@
   <div class="reveal">
     <div class="slides">
 
-<section data-state="intro">
-    <h1 class="title">Gérer les erreurs avec l'aide du système de types de Scala !</h1>
-    <h2 class="author">David Sferruzza</h2>
-    <h3 class="date">22/04/2016</h3>
+<section>
+  <h1 class="title">Gérer les erreurs avec l'aide du système de types de Scala !</h1>
+  <h2 class="author">David Sferruzza</h2>
+  <h3 class="date">22/04/2016</h3>
 </section>
 
 <section id="à-propos-de-moi" class="slide level1">
@@ -521,9 +518,7 @@ modes.explicit._</code></pre>
 </div>
 </section>
     </div>
-    <div class="footer"><p>#DevoxxFR</p><img align="right" src="img/logo-texte-devoxx-france-400.png" /></div>
   </div>
-
 
   <script src="lib/reveal.js/lib/js/head.min.js"></script>
   <script src="lib/reveal.js/js/reveal.js"></script>
@@ -535,27 +530,26 @@ modes.explicit._</code></pre>
         slides[i].removeAttribute('id');
       }
 
-      // Full list of configuration options available here:
+      // Full list of configuration options available at:
       // https://github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
-        controls: false,         // Display controls in the bottom right corner
-        progress: true,         // Display a presentation progress bar
-        history: true,          // Push each slide change to the browser history
-        center: false,                       // Vertical centering of slides
-        maxScale: 1.5,                  // Bounds for smallest/largest possible content scale
-        slideNumber: true,                // Display the page number of the current slide
-        theme: 'devoxx', // available themes are in /css/theme
-        transition: 'none', // default/cube/page/concave/zoom/linear/fade/none
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Transition style
+        transition: 'none', // none/fade/slide/convex/concave/zoom
 
-        // Optional libraries used to extend on reveal.js
+        // Optional reveal.js plugins
         dependencies: [
           { src: 'lib/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
           { src: 'lib/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-          { src: 'lib/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-          { src: 'lib/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
-          //{ src: 'lib/reveal.js/plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; }, }
-          //{ src: 'lib/reveal.js/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
-      ]});
+          { src: 'lib/reveal.js/plugin/zoom-js/zoom.js', async: true },
+          { src: 'lib/reveal.js/plugin/notes/notes.js', async: true }
+        ]
+      });
     </script>
     </body>
 </html>

@@ -1,6 +1,6 @@
 {
   "name": "reveal.js",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "main": [
     "js/reveal.js",
     "css/reveal.css"
@@ -24,13 +24,13 @@
     "bower_components",
     "test"
   ],
-  "_release": "3.2.0",
+  "_release": "3.3.0",
   "_resolution": {
     "type": "version",
-    "tag": "3.2.0",
-    "commit": "822a9c937c902807e376713760e1f07845951d5a"
+    "tag": "3.3.0",
+    "commit": "539e774d31f91676bcc3f75e28168921cd27d819"
   },
   "_source": "https://github.com/hakimel/reveal.js.git",
-  "_target": "3.2.0",
+  "_target": "3.3.0",
   "_originalSource": "reveal.js"
 }
