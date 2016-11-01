@@ -1,6 +1,6 @@
 % Gérer les erreurs avec l'aide du système de types de Scala !
 % David Sferruzza
-% 22/04/2016
+% 02/11/2016
 
 # À propos de moi
 
