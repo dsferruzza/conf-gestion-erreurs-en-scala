@@ -51,15 +51,22 @@
 <p>Un joueur est ajouté à notre application.</p>
 <pre class="json"><code>{ &quot;name&quot;: &quot;Batman&quot;, &quot;level&quot;: 99, &quot;hp&quot;: 85 }</code></pre>
 <p>Le JSON est parsé et les erreurs de structure gérées.</p>
-<pre class="scala"><code>case class Player(name: String, level: Int, hp: Int)</code></pre>
+<pre class="scala"><code>case class Player(name: String,
+                  level: Int,
+                  hp: Int)</code></pre>
 <p>On veut valider ces données avec des critères métier.</p>
+</section>
+<section id="cas-dexemple-1" class="slide level1">
+<h1>Cas d'exemple</h1>
 <pre class="scala"><code>// On veut implémenter cette fonction
 def validate(player: Player): ValidPlayer = ???
 
-case class ValidPlayer(name: String, level: Int, hp: Int)
+case class ValidPlayer(name: String,
+                       level: Int,
+                       hp: Int)
 // ^ Même structure que Player</code></pre>
 </section>
-<section id="cas-dexemple-1" class="slide level1">
+<section id="cas-dexemple-2" class="slide level1">
 <h1>Cas d'exemple</h1>
 <pre class="scala"><code>case class Player(name: String,
                   level: Int,
@@ -71,17 +78,18 @@ case class ValidPlayer(name: String, level: Int, hp: Int)
 <li>moins de points de vie que <code>95 + niveau * 5</code></li>
 </ul>
 </section>
-<section id="cas-dexemple-2" class="slide level1">
+<section id="cas-dexemple-3" class="slide level1">
 <h1>Cas d'exemple</h1>
 <p>Longueur de nom supérieur à 3 caractères :</p>
-<pre class="scala"><code>def validateName(name: String): Boolean = name.size &gt;= 3</code></pre>
+<pre class="scala"><code>def validateName(name: String): Boolean =
+  name.size &gt;= 3</code></pre>
 <p>Niveau strictement positif :</p>
 <pre class="scala"><code>def validateLevel(level: Int): Boolean = level &gt; 0</code></pre>
 <p>Moins de points de vie que <code>95 + niveau * 5</code> :</p>
 <pre class="scala"><code>def validateHp(level: Int, hp: Int): Boolean =
   hp &lt;= 95 + level * 5</code></pre>
 </section>
-<section id="cas-dexemple-3" class="slide level1">
+<section id="cas-dexemple-4" class="slide level1">
 <h1>Cas d'exemple</h1>
 <p><code>validate</code> peut échouer à produire une valeur de type <code>ValidPlayer</code>.</p>
 <pre class="scala"><code>def validate(player: Player): ValidPlayer = ???</code></pre>
@@ -202,8 +210,9 @@ catch {
 <p>Une erreur métier est un résultat comme un autre.</p>
 </blockquote>
 <p>Comment peut-on représenter ces erreurs métier en Scala ?</p>
-<pre class="scala"><code>case object NameTooShort</code></pre>
-<pre class="scala"><code>case class TooManyHp(current: Int, max: Int)</code></pre>
+<pre class="scala"><code>case object NameTooShort
+case object InvalidLevel
+case class TooManyHp(current: Int, max: Int)</code></pre>
 </section>
 <section id="type-algébrique-de-données-adt" class="slide level1">
 <h1>Type algébrique de données (ADT)</h1>
@@ -258,12 +267,14 @@ val e3: VE = TooManyHp(current, max)</code></pre>
 <li><code>None</code></li>
 <li><code>Some(x: A)</code></li>
 </ul>
+<div class="smallcode">
 <pre class="scala"><code>def validate(player: Player): Option[ValidPlayer] = {
   if ( /* ... */ ) {
     Some(ValidPlayer( /* ... */ ))
   }
   else None
 }</code></pre>
+</div>
 <p>Suffisant si on n'a pas besoin d'information sur l'erreur.</p>
 </section>
 <section id="optiona-a" class="slide level1">
@@ -315,6 +326,7 @@ playerName.getOrElse(Player( /* ... */ ))</code></pre>
 <pre class="scala"><code>val player = Player( /* ... */ )
 val validPlayer = validate(player) // Either[VE, ValidPlayer]</code></pre>
 </div>
+<div class="smallcode">
 <pre class="scala"><code>// Modifier sans traiter l&#39;erreur :
 val playerName = validPlayer.right.map(p =&gt; p.name)
 //  ^ Either[VE, String]
@@ -327,6 +339,7 @@ validPlayer match {
   case Left(TooManyHp(current, max)) =&gt; // On gère l&#39;erreur
   // Warning du compilateur si on oublie un cas \o/
 }</code></pre>
+</div>
 </section>
 <section id="tryt" class="slide level1">
 <h1>Try[T]</h1>
@@ -347,7 +360,8 @@ validPlayer match {
 <p>An extension to the core Scala library for functional programming.</p>
 <p><a href="https://github.com/scalaz/scalaz" class="uri">https://github.com/scalaz/scalaz</a></p>
 </blockquote>
-<pre class="scala"><code>libraryDependencies += &quot;org.scalaz&quot; %% &quot;scalaz-core&quot; % &quot;7.2.7&quot;</code></pre>
+<pre class="scala"><code>libraryDependencies +=
+  &quot;org.scalaz&quot; %% &quot;scalaz-core&quot; % &quot;7.2.7&quot;</code></pre>
 <ul>
 <li><code>\/</code> (disjunction)</li>
 <li><code>NonEmptyList</code></li>
@@ -405,9 +419,11 @@ scalaz.NonEmptyList(1, 2, 3)  // Compile</code></pre>
 </section>
 <section id="scalaz.validationnele-a" class="slide level1">
 <h1>scalaz.ValidationNel[E, A]</h1>
+<div class="smallcode">
 <pre class="scala"><code>import scalaz.{ NonEmptyList, ValidationNel, Success, Failure }
 import scalaz.syntax.applicative._
 import scalaz.syntax.validation._</code></pre>
+</div>
 <div class="smallcode">
 <pre class="scala"><code>def validate(p: Player): ValidationNel[VE, ValidPlayer] = {
   val vName = if (validateName(p.name)) Success(p.name)
@@ -457,12 +473,14 @@ import scalaz.syntax.validation._</code></pre>
 <h1>rapture.modes</h1>
 <pre class="scala"><code>import rapture.core._</code></pre>
 <p>On <em>wrap</em> notre fonction <code>validate</code> qui renvoie un <code>Either</code>.</p>
+<div class="smallcode">
 <pre class="scala"><code>def validate(player: Player)(implicit mode: Mode[_]):
                             mode.Wrap[ValidPlayer, VE] = {
   mode.wrapEither(validateEither(player))
   //              ^^^^^^^^^^^^^^
   // def validateEither(p: Player): Either[VE, ValidPlayer]
 }</code></pre>
+</div>
 <figure class="stretch">
 <img src="img/wrap.gif" alt="">
 </figure>
@@ -471,15 +489,19 @@ import scalaz.syntax.validation._</code></pre>
 <h1>rapture.modes</h1>
 <p>On importe un <em>mode</em> à l'endroit de l'appel.</p>
 <p>Par exemple, <code>returnOption</code> :</p>
+<div class="smallcode">
 <pre class="scala"><code>def validateOption(player: Player): Option[ValidPlayer] = {
   import modes.returnOption._
   validate(player)
 }</code></pre>
+</div>
 <p>Ou <code>returnTry</code> :</p>
+<div class="smallcode">
 <pre class="scala"><code>def validateTry(player: Player): Try[ValidPlayer] = {
   import modes.returnTry._
   validate(player)
 }</code></pre>
+</div>
 </section>
 <section id="rapture.modes-2" class="slide level1">
 <h1>rapture.modes</h1>
