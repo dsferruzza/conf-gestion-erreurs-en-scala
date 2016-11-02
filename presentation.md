@@ -23,16 +23,23 @@ Un joueur est ajouté à notre application.
 Le JSON est parsé et les erreurs de structure gérées.
 
 ```scala
-case class Player(name: String, level: Int, hp: Int)
+case class Player(name: String,
+                  level: Int,
+                  hp: Int)
 ```
 
 On veut valider ces données avec des critères métier.
+
+
+# Cas d'exemple
 
 ```scala
 // On veut implémenter cette fonction
 def validate(player: Player): ValidPlayer = ???
 
-case class ValidPlayer(name: String, level: Int, hp: Int)
+case class ValidPlayer(name: String,
+                       level: Int,
+                       hp: Int)
 // ^ Même structure que Player
 ```
 
@@ -56,7 +63,8 @@ Pour qu'un joueur soit valide (et devienne un `ValidPlayer`), il doit respecter 
 
 Longueur de nom supérieur à 3 caractères :
 ```scala
-def validateName(name: String): Boolean = name.size >= 3
+def validateName(name: String): Boolean =
+  name.size >= 3
 ```
 
 Niveau strictement positif :
@@ -212,8 +220,7 @@ Comment peut-on représenter ces erreurs métier en Scala ?
 
 ```scala
 case object NameTooShort
-```
-```scala
+case object InvalidLevel
 case class TooManyHp(current: Int, max: Int)
 ```
 
@@ -278,6 +285,7 @@ scalacOptions ++= Seq(
 - `None`
 - `Some(x: A)`
 
+<div class="smallcode">
 ```scala
 def validate(player: Player): Option[ValidPlayer] = {
   if ( /* ... */ ) {
@@ -286,6 +294,7 @@ def validate(player: Player): Option[ValidPlayer] = {
   else None
 }
 ```
+</div>
 
 Suffisant si on n'a pas besoin d'information sur l'erreur.
 
@@ -353,6 +362,7 @@ val validPlayer = validate(player) // Either[VE, ValidPlayer]
 ```
 </div>
 
+<div class="smallcode">
 ```scala
 // Modifier sans traiter l'erreur :
 val playerName = validPlayer.right.map(p => p.name)
@@ -367,6 +377,7 @@ validPlayer match {
   // Warning du compilateur si on oublie un cas \o/
 }
 ```
+</div>
 
 
 # Try[T]
@@ -388,7 +399,8 @@ Similaire à `Either` :
 > <https://github.com/scalaz/scalaz>
 
 ```scala
-libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.2.7"
+libraryDependencies +=
+  "org.scalaz" %% "scalaz-core" % "7.2.7"
 ```
 
 - `\/` (disjunction)
@@ -459,11 +471,13 @@ scalaz.NonEmptyList(1, 2, 3)  // Compile
 
 # scalaz.ValidationNel[E, A]
 
+<div class="smallcode">
 ```scala
 import scalaz.{ NonEmptyList, ValidationNel, Success, Failure }
 import scalaz.syntax.applicative._
 import scalaz.syntax.validation._
 ```
+</div>
 
 <div class="smallcode">
 ```scala
@@ -527,6 +541,7 @@ import rapture.core._
 
 On *wrap* notre fonction `validate` qui renvoie un `Either`.
 
+<div class="smallcode">
 ```scala
 def validate(player: Player)(implicit mode: Mode[_]):
                             mode.Wrap[ValidPlayer, VE] = {
@@ -535,6 +550,7 @@ def validate(player: Player)(implicit mode: Mode[_]):
   // def validateEither(p: Player): Either[VE, ValidPlayer]
 }
 ```
+</div>
 
 <figure class="stretch"><img src="img/wrap.gif" alt=""></figure>
 
@@ -545,21 +561,25 @@ On importe un *mode* à l'endroit de l'appel.
 
 Par exemple, `returnOption` :
 
+<div class="smallcode">
 ```scala
 def validateOption(player: Player): Option[ValidPlayer] = {
   import modes.returnOption._
   validate(player)
 }
 ```
+</div>
 
 Ou `returnTry` :
 
+<div class="smallcode">
 ```scala
 def validateTry(player: Player): Try[ValidPlayer] = {
   import modes.returnTry._
   validate(player)
 }
 ```
+</div>
 
 
 # rapture.modes
